@@ -1,4 +1,6 @@
-    @Override
+   
+   //效率低
+   @Override
     public void synchronizeDimModel() throws Exception {
         Map param = new HashMap();
         List<Map<String,String>> list1 = this.selectList("queryAllDimTableList",param);
