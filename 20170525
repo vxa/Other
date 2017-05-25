@@ -1,0 +1,27 @@
+    @Override
+    public void synchronizeDimModel() throws Exception {
+        Map param = new HashMap();
+        List<Map<String,String>> list1 = this.selectList("queryAllDimTableList",param);
+        for (Map map1 : list1){
+            String tableName = String.valueOf(map1.get("table_name"));
+            param.put("table_name",tableName);
+            //查询维表的新增字段
+            List<Map<String,String>> list2 = this.selectList("queryNewDimTableList",param);
+            //查询维表table_id
+            Map map = this.queryListByPage("queryDimTableList",param);
+
+            TbMdDimTableDef table = new TbMdDimTableDef();
+            List<TbMdColsDef> tbMdColsDefList = new LinkedList<TbMdColsDef>();
+            TbMdColsDef tbMdColsDef = new TbMdColsDef();
+
+            for(Map map2 : list2){
+                tbMdColsDef.setTableId(Long.valueOf(String.valueOf(map.get("table_id"))));
+                tbMdColsDef.setColName(String.valueOf(map2.get("column_name")));
+                tbMdColsDef.setColDatatype(String.valueOf(map2.get("data_type")));
+                tbMdColsDefList.add(tbMdColsDef);
+                table.setTbMdColsDef(tbMdColsDefList);
+
+            }
+            this.insert("addDimColModel",table);
+        }
+    }
