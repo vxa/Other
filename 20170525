@@ -27,3 +27,18 @@
             this.insert("addDimColModel",table);
         }
     }
+
+
+    <!--查询数据库维表新增的字段-->
+    <select id="queryNewDimTableList" resultType="java.util.LinkedHashMap" parameterType="java.util.Map">
+        select t.column_name,t.data_type,t.data_length
+        from all_tab_columns t
+        where t.owner = 'EDA'
+        and t.table_name = ${table_name}
+        and not exists (select 1
+        from tb_md_dim_table_def a, tb_md_cols_def b
+        where t.column_name = b.col_name
+        and a.table_id = b.table_id
+        and a.table_state = 1
+        and a.table_name = ${table_name});
+    </select>
